@@ -1,0 +1,16 @@
+body {
+  background-color: #808080;
+}
+#torus {
+width: 881.6px;
+height: 881.6px;
+border: 1px solid #000;
+background-color: #fff;
+}
+.empty-cell {
+  width: 10px;
+  height: 10px;
+  border: 0.5px solid #808080;
+  float: left;
+  font-size: 4px;
+}
