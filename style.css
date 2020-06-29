@@ -18,3 +18,7 @@ body {
   float: left;
   font-size: 4px;
 }
+
+.alive-cell {
+  background-color: #000;
+}
