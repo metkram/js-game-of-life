@@ -16,7 +16,7 @@ body {
   height: 10px;
   border: 1px solid #808080;
   float: left;
-  font-size: 4px;
+  font-size: 0;
 }
 
 .alive-cell {

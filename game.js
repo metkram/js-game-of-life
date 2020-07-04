@@ -3,15 +3,15 @@
 class Game {
   constructor() {
     this.torus = new Torus();
-    console.log(this.torus.matrix[0]);
     this.cells = [];
     this.start = false;
     setTimeout(() => this.step(), 1000);
+    this.torus.updateCells(this.torus.getNeighbors(0, 0), "alive");
   }
   theCreationOfAdam(e) {
     //have to add check for the same cells
     this.cells.push(e.target.innerText.split(","));
-    this.torus.addAliveCells(this.cells);
+    this.torus.updateCells(this.cells, "alive");
     console.log(this.cells);
   }
   step() {
@@ -29,7 +29,7 @@ class Torus {
   constructor() {
     this.gridOnPage();
     this.blocks = document.body.querySelectorAll(".empty-cell");
-    this.matrix = this.newMatrix();
+    this.cellsArray = this.newCellsArray();
   }
   get x() {
     return Math.floor(document.body.clientWidth / 12);
@@ -37,20 +37,18 @@ class Torus {
   get y() {
     return Math.floor(document.body.clientHeight / 12);
   }
-  newMatrix() {
-    let matrix = [];
+  newCellsArray() {
+    let cells = [];
     for (let i = 0; i < this.y; i++) {
-      let line = [];
       for (let u = 0; u < this.x; u++) {
         let cell = {};
         cell.x = i;
         cell.y = u;
         cell.alive = false;
-        line.push(cell);
+        cells.push(cell);
       }
-      matrix.push(line);
     }
-    return matrix;
+    return cells;
   }
   gridOnPage() {
     for (let i = 0; i < this.y; i++) {
@@ -66,17 +64,40 @@ class Torus {
     }
   }
   renderMatrix() {
-    for (let i = 0; i < this.matrix.length; i++) {
-      for (let u = 0; u < this.matrix[i].length; u++) {
-        if (this.matrix[i][u].alive) this.blocks[i * this.x + u].classList.add("alive-cell");
+    for (let cell of this.cellsArray) {
+      if (cell.alive) {
+        this.blocks[cell.x * this.x + cell.y].classList.add("alive-cell");
+      } else {
+        this.blocks[cell.x * this.x + cell.y].className = "empty-cell";
       }
     }
   }
-  addAliveCells(cells) {
-    for (let cell of cells) {
-      this.matrix[cell[0]][cell[1]].alive = true;
+  updateCells(cells, status) {
+    switch (status) {
+      case "dead":
+        for (let cell of cells) {
+          this.cellsArray.find(item => item.x == cell[0] && item.y == cell[1]).alive = false;
+        }
+        break;
+      case "alive":
+        for (let cell of cells) {
+          this.cellsArray.find(item => item.x == cell[0] && item.y == cell[1]).alive = true;
+        }
+        break;
     }
     this.renderMatrix();
+  }
+  getNeighbors(x, y) {
+    let neighbors = [[y, x - 1], [y - 1, x - 1], [y - 1, x], [y - 1, x + 1], [y, x + 1], [y + 1, x + 1], [y + 1, x], [y + 1, x - 1]];
+    return neighbors.filter(item => item[0] > -1 && item[1] > -1 && item[0] < this.y && item[1] < this.x);
+  }
+  addAliveCells() {
+    let alive = [];
+    for (let i = 0; i < this.y; i++) {
+      for (let u = 0; u < this.x; u++) {
+
+      }
+    }
   }
 }
 
